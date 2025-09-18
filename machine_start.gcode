@@ -28,7 +28,6 @@ M140 S[bed_temperature_initial_layer_single] ;set bed temp
 M190 S[bed_temperature_initial_layer_single] ;wait for bed temp
 
 
-
 ;=============turn on fans to prevent PLA jamming=================
 {if filament_type[initial_extruder]=="PLA"}
     {if (bed_temperature[initial_extruder] >45)||(bed_temperature_initial_layer[initial_extruder] >45)}
@@ -262,7 +261,9 @@ M975 S1 ; turn on vibration supression
 
 ;=============turn on fans to prevent PLA jamming=================
 {if filament_type[initial_extruder]=="PLA"}
-    {if (bed_temperature[initial_extruder] >45)||(bed_temperature_initial_layer[initial_extruder] >45)}
+    {if (bed_temperature[initial_extruder] >50)||(bed_temperature_initial_layer[initial_extruder] >50)}
+    M106 P3 S255
+    {elsif (bed_temperature[initial_extruder] >45)||(bed_temperature_initial_layer[initial_extruder] >45)}
     M106 P3 S180
     {endif};Prevent PLA from jamming
 {endif}
@@ -294,16 +295,18 @@ M975 S1
 G90
 M83
 T1000
-G1 X18.0 Y1.0 Z0.8 F18000;Move to start position
+G1 X18.0 Y0.5 Z0.8 F18000;Move to start position
 M109 S{nozzle_temperature_initial_layer[initial_extruder]}
 G1 Z0.2
 G0 E2 F300
-G0 X240 E15 F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}
-G0 Y11 E0.700 F{outer_wall_volumetric_speed/(0.3*0.5)/ 4 * 60}
+G0 X129 E15 F{outer_wall_volumetric_speed/(0.3*1.0)     * 60}
+G0 X240 E15
+G0 Y15 E1.500 F{outer_wall_volumetric_speed/(0.3*1.0)/ 4 * 60}
 G0 X239.5
-G0 E0.2
-G0 Y1.5 E0.700
-G0 X18 E15 F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}
+G0 E0.3
+G0 Y1.5 E1.500
+G0 X129 E15 F{outer_wall_volumetric_speed/(0.3*1.0)     * 60}
+G0 X18 E15
 M400
 
 ;===== for Textured PEI Plate , lower the nozzle as the nozzle was touching topmost of the texture when homing ==
